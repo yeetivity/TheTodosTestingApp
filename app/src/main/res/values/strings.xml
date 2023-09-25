@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Todos</string>
+    <string name="error_loading_todos">Error while loading todos</string>
+    <string name="todo_saved">Todo saved</string>
+    <string name="todo_added">Todo added</string>
+    <string name="todo_deleted">Todo was deleted</string>
+    <string name="todo_marked_as_complete">Todo marked as complete</string>
+    <string name="todo_marked_active">Todo marked active</string>
+    <string name="completed_todos_cleared">Completed todos cleared</string>
+    <string name="label_all">All Tasks</string>
+    <string name="label_active">Active Tasks</string>
+    <string name="label_completed">Completed Tasks</string>
+    <string name="no_tasks_all">You have no tasks!</string>
+    <string name="no_tasks_active">You have no active tasks!</string>
+    <string name="no_tasks_completed">You have no completed tasks!</string>
+</resources>
