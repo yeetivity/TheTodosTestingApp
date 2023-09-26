@@ -1,6 +1,5 @@
 package mobappdev.example.todos.ui.scr_and_vm
 
-import android.app.Application
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -31,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import mobappdev.example.todos.R
@@ -43,8 +43,6 @@ import mobappdev.example.todos.ui.navigation.AppNavigationActions
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    application: Application,
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -52,12 +50,8 @@ fun MainScreen(
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: AllDestinations.HOME
 
-    val todoViewModel = remember {
-        TodoVM(application = application)
-    }
-    val statsViewModel = remember {
-        StatisticsVM(application = application)
-    }
+    val todoViewModel = hiltViewModel<TodoVM>()
+    val statsViewModel = hiltViewModel<StatisticsVM>()
 
     val navigationActions = remember(navController) {
         AppNavigationActions(navController)

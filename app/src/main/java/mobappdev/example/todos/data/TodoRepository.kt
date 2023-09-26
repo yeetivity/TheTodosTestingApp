@@ -1,47 +1,24 @@
 package mobappdev.example.todos.data
 
-import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.room.Room
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import mobappdev.example.todos.data.local.TodoDatabase
-import mobappdev.example.todos.data.local.TodoLocalDataSource
 import mobappdev.example.todos.data.Result.*
+import mobappdev.example.todos.data.local.TodoLocalDataSource
 import mobappdev.example.todos.data.todos.Todo
+import javax.inject.Inject
 
 /**
  * Concrete implementation to load tasks from the data sources into a cache.
  */
-class TodoRepository private constructor(application: Application) {
+class TodoRepository @Inject constructor(
+    private val todosLocalDataSource: TodoLocalDataSource,
+    private val ioDispatcher: CoroutineDispatcher
+) {
 
-    private val todosLocalDataSource: TodoDataSource
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
-
-    companion object {
-        @Volatile
-        private var INSTANCE: TodoRepository? = null
-
-        fun getRepository(app: Application): TodoRepository {
-            return INSTANCE ?: synchronized(this) {
-                TodoRepository(app).also {
-                    INSTANCE = it
-                }
-            }
-        }
-    }
-
-    init {
-        val database = Room.databaseBuilder(application.applicationContext,
-            TodoDatabase::class.java, "Todos.db")
-            .build()
-
-        todosLocalDataSource = TodoLocalDataSource(database.todoDao())
-    }
 
     suspend fun getTodos(forceUpdate: Boolean = false): Result<List<Todo>> {
         return todosLocalDataSource.getTodos()
@@ -56,7 +33,7 @@ class TodoRepository private constructor(application: Application) {
     }
 
     /**
-     * Relies on [getTasks] to fetch data and picks the task with the same ID.
+     * Relies on [getTodos] to fetch data and picks the task with the same ID.
      */
     suspend fun getTodo(todoId: String,  forceUpdate: Boolean = false): Result<Todo> {
         return todosLocalDataSource.getTodo(todoId)

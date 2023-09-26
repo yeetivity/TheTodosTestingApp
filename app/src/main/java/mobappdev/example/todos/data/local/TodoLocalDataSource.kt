@@ -3,21 +3,19 @@ package mobappdev.example.todos.data.local
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import mobappdev.example.todos.data.todos.Todo
-import mobappdev.example.todos.data.TodoDataSource
 import mobappdev.example.todos.data.Result
-import mobappdev.example.todos.data.Result.Success
 import mobappdev.example.todos.data.Result.Error
+import mobappdev.example.todos.data.Result.Success
+import mobappdev.example.todos.data.TodoDataSource
+import mobappdev.example.todos.data.todos.Todo
 import javax.inject.Inject
 
-// Todo: Set up the Dependency Injection
 class TodoLocalDataSource @Inject constructor(
     private val todoDao: TodoDao,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher
 ): TodoDataSource {
     override fun observeTodos(): LiveData<Result<List<Todo>>> {
         return todoDao.observeTodos().map {

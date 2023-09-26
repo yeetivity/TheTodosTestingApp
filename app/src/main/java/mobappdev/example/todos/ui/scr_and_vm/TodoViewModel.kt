@@ -1,27 +1,28 @@
 package mobappdev.example.todos.ui.scr_and_vm
 
-import android.app.Application
 import androidx.annotation.StringRes
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mobappdev.example.todos.R
-import mobappdev.example.todos.data.TodoRepository
 import mobappdev.example.todos.data.Result
 import mobappdev.example.todos.data.Result.Success
+import mobappdev.example.todos.data.TodoRepository
 import mobappdev.example.todos.data.todos.Todo
 import mobappdev.example.todos.data.todos.TodoFilterType
 import mobappdev.example.todos.ui.components.Event
 import mobappdev.example.todos.utils.Constants.ADD_EDIT_RESULT_OK
 import mobappdev.example.todos.utils.Constants.DELETE_RESULT_OK
 import mobappdev.example.todos.utils.Constants.EDIT_RESULT_OK
+import javax.inject.Inject
 
 interface TodoViewModel {
     val items: LiveData<List<Todo>>
@@ -41,13 +42,10 @@ interface TodoViewModel {
     fun showEditResultMessage(result: Int)
 }
 
-class TodoVM(
-    application: Application
-): TodoViewModel, AndroidViewModel(application) {
-    // Todo: Note, for testing and architecture purposes, it's bad practice to construct the repository
-    // here. We'll show you how to fix this during the codelab
-    private val todoRepository = TodoRepository.getRepository(application)
-
+@HiltViewModel
+class TodoVM @Inject constructor(
+    private val todoRepository: TodoRepository
+): TodoViewModel, ViewModel() {
     private val _filterCriteria: MutableLiveData<TodoFilterType> = MutableLiveData(TodoFilterType.ALL_TODOS)
     private val _mediatorItems = MediatorLiveData<List<Todo>>()
     override val items: LiveData<List<Todo>>
@@ -84,7 +82,6 @@ class TodoVM(
             }
         }
     }
-
 
     override fun cycleFiltering() {
         // Cycle through the filter types

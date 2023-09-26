@@ -7,12 +7,12 @@ import mobappdev.example.todos.data.todos.Todo
  */
 
 internal fun getActiveAndCompletedStats(tasks: List<Todo>?): StatsResult {
-    val totalTasks = tasks!!.size
-    val numberOfActiveTasks = tasks.count { it.isActive }
+    val totalTodos = tasks!!.size
+    val numberOfActiveTodos = tasks.count { it.isActive }
     return StatsResult(
-        activeTasksPercent = 100f * numberOfActiveTasks / tasks.size,
-        completedTasksPercent = 100f * (totalTasks - numberOfActiveTasks) / tasks.size
+        activeTodosPercent = 100f * numberOfActiveTodos / tasks.size,
+        completedTodosPercent = 100f * (totalTodos - numberOfActiveTodos) / tasks.size
     )
 }
 
-data class StatsResult(val activeTasksPercent: Float, val completedTasksPercent: Float)
+data class StatsResult(val activeTodosPercent: Float, val completedTodosPercent: Float)
