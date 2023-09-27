@@ -1,6 +1,5 @@
 package mobappdev.example.todos.ui.scr_and_vm
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -27,7 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,8 +34,6 @@ import androidx.navigation.compose.rememberNavController
 import mobappdev.example.todos.data.todos.Todo
 import mobappdev.example.todos.ui.components.AddNoteFAB
 import mobappdev.example.todos.ui.navigation.AllDestinations
-import mobappdev.example.todos.ui.theme.Green
-import mobappdev.example.todos.ui.theme.OffWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +52,8 @@ fun TodoScreen(
             AddNoteFAB(
                 onClick = { navController.navigate(AllDestinations.TODO_ADD) },
                 icon = Icons.Filled.Add,
-                contentDescription = "Add new Todo"
+                contentDescription = "Add new Todo",
+                modifier = Modifier.testTag("AddTodoFAB")
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -82,7 +78,8 @@ fun TodoScreen(
                             vm.openTodo(todo = todo)
                             navController.navigate(AllDestinations.TODO_EDIT)
                         },
-                        onCompleteChange = { vm.completeTodo(todo, !todo.isCompleted) }
+                        onCompleteChange = { vm.completeTodo(todo, !todo.isCompleted) },
+                        modifier = Modifier.testTag(todo.title)
                     )
                 }
             }
@@ -93,9 +90,14 @@ fun TodoScreen(
 
 
 @Composable
-fun TodoRow(todo: Todo, onClick: () -> Unit, onCompleteChange: () -> Unit) {
+fun TodoRow(
+    todo: Todo,
+    onClick: () -> Unit,
+    onCompleteChange: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onClick() },
         horizontalArrangement = Arrangement.Start,

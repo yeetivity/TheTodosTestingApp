@@ -207,22 +207,22 @@ class FakeTodoVM : TodoViewModel {
         get() = MutableLiveData(
             listOf(
                 Todo(
-                    title = "Something 1",
+                    title = "Todo 1",
                     description = "This is my descr",
                     isCompleted = false
                 ),
                 Todo(
-                    title = "Something 2",
+                    title = "Todo 2",
                     description = "This is my descr",
                     isCompleted = true
                 ),
                 Todo(
-                    title = "Something 3",
+                    title = "Todo 3",
                     description = "This is my descr",
                     isCompleted = true
                 ),
                 Todo(
-                    title = "Something 4",
+                    title = "Todo 4",
                     description = "This is my descr",
                     isCompleted = false
                 )

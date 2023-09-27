@@ -25,12 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import mobappdev.example.todos.R
@@ -129,24 +129,41 @@ fun MainScreen(
                 )
             ) }
         ) {
-            NavHost(
+            MainNavHost(
                 navController = navController,
                 startDestination = AllDestinations.HOME,
+                todoViewModel = todoViewModel,
+                statsViewModel = statsViewModel,
                 modifier = Modifier.padding(it)
-            ) {
-                composable(AllDestinations.HOME) {
-                    TodoScreen(todoViewModel, navController)
-                }
-                composable(AllDestinations.STATISTICS) {
-                    StatisticsScreen(statsViewModel)
-                }
-                composable(AllDestinations.TODO_ADD) {
-                    AddTodoScreen(todoViewModel, navController)
-                }
-                composable(AllDestinations.TODO_EDIT) {
-                    EditTodoScreen(todoViewModel, navController)
-                }
-            }
+            )
+        }
+    }
+}
+
+@Composable
+fun MainNavHost(
+    navController: NavHostController,
+    startDestination: String,
+    todoViewModel: TodoViewModel,
+    statsViewModel: StatisticsViewModel,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination,
+        modifier = modifier
+    ) {
+        composable(AllDestinations.HOME) {
+            TodoScreen(todoViewModel, navController)
+        }
+        composable(AllDestinations.STATISTICS) {
+            StatisticsScreen(statsViewModel)
+        }
+        composable(AllDestinations.TODO_ADD) {
+            AddTodoScreen(todoViewModel, navController)
+        }
+        composable(AllDestinations.TODO_EDIT) {
+            EditTodoScreen(todoViewModel, navController)
         }
     }
 }
